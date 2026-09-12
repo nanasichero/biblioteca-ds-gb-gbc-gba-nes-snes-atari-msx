@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Completa Nintendo DS & Emuladores no R4</title>
+    <style>
+        :root {
+            --primary: #121212;
+            --secondary: #e60012;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #212529;
+            --border: #dee2e6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+        }
+
+        p.subtitle {
+            color: #6c757d;
+            margin-top: 0;
+            font-size: 0.95rem;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"], select {
+            padding: 10px 14px;
+            font-size: 0.95rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            outline: none;
+            flex: 1;
+            min-width: 220px;
+            background: white;
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(230, 0, 18, 0.1);
+        }
+
+        .stats {
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+
+        .table-wrapper {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            border: 1px solid var(--border);
+            max-height: 650px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        tr:hover {
+            background-color: #f1f3f5;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 7px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .badge-usa { background-color: #e7f5ff; color: #1c7ed6; }
+        .badge-eur { background-color: #ebfbee; color: #2b8a3e; }
+        .badge-jpn { background-color: #fff5f5; color: #c92a2a; }
+        .badge-world { background-color: #fff9db; color: #f08c00; }
+        .badge-emu { background-color: #f3f0ff; color: #7950f4; }
+
+        .ap-yes { color: #c92a2a; font-weight: 600; }
+        .ap-no { color: #2b8a3e; }
+
+        footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: #adb5bd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Nintendo DS & Emuladores via R4 (Catálogo Completo)</h1>
+        <p class="subtitle">Lista unificada de títulos nativos do DS + Emuladores de consoles antigos executáveis no R4</p>
+    </header>
+
+    <div class="controls">
+        <input type="text" id="searchInput" placeholder="Pesquisar por título, console ou serial..." onkeyup="filterTable()">
+        <select id="regionFilter" onchange="filterTable()">
+            <option value="">Todas as Categorias / Regiões</option>
+            <option value="USA">USA (DS)</option>
+            <option value="EUR">Europa / EUR (DS)</option>
+            <option value="JPN">Japão / JPN (DS)</option>
+            <option value="World">World / Multilang (DS)</option>
+            <option value="Emulador">Emuladores / Homebrews (GBA, NES, SNES, etc.)</option>
+        </select>
+    </div>
+
+    <div class="stats" id="statsCount">Carregando catálogo...</div>
+
+    <div class="table-wrapper">
+        <table id="gameTable">
+            <thead>
+                <tr>
+                    <th style="width: 45%;">Título ou Emulador</th>
+                    <th style="width: 20%;">Tipo / Categoria</th>
+                    <th style="width: 20%;">Serial / Engine</th>
+                    <th style="width: 15%;">Anti-Pirataria / Requisito</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Preenchido via JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        Pronto para GitHub Pages e uso direto no MicroSD do R4.
+    </footer>
+</div>
+
+<script>
+    const gamesData = [
+        // --- SEÇÃO DE EMULADORES E HOMEBREWS EXECUTÁVEIS NO R4 ---
+        { title: "JEnesisDS (Emulador de Sega Genesis / Mega Drive)", region: "Emulador", serial: "EMU-GENESIS", ap: false },
+        { title: "NesDS (Emulador de Nintendo / NES)", region: "Emulador", serial: "EMU-NES", ap: false },
+        { title: "SNEmulDS / SNESDS (Emulador de Super Nintendo / SNES)", region: "Emulador", serial: "EMU-SNES", ap: false },
+        { title: "GameYob (Emulador de Game Boy / Game Boy Color)", region: "Emulador", serial: "EMU-GB/GBC", ap: false },
+        { title: "GBARunner2 / GBARunner3 (Executor de Game Boy Advance)", region: "Emulador", serial: "EMU-GBA", ap: false },
+        { title: "StellaDS (Emulador de Atari 2600)", region: "Emulador", serial: "EMU-ATARI", ap: false },
+        { title: "S8DS (Emulador de Master System / Game Gear / ColecoVision)", region: "Emulador", serial: "EMU-SEGA8", ap: false },
+        { title: "neoDS (Emulador de Neo Geo MVS)", region: "Emulador", serial: "EMU-NEOC", ap: false },
+        { title: "ScummVM DS (Emulador de Jogos Point-and-Click)", region: "Emulador", serial: "EMU-SCUMM", ap: false },
+        { title: "DSx86 (Emulador de PC DOS para rodar jogos antigos de PC)", region: "Emulador", serial: "EMU-DOS", ap: false },
+        { title: "Quake DS (Port do motor clássico de FPS)", region: "Emulador", serial: "HB-QUAKE", ap: false },
+        { title: "DoomDS (Port do motor de Doom 1 e 2)", region: "Emulador", serial: "HB-DOOM", ap: false },
+
+        // --- BIBLIOTECA NATIVA DE NINTENDO DS (A a Z) ---
+        { title: "Advance Wars: Dual Strike", region: "USA", serial: "NTR-AW8E-USA", ap: false },
+        { title: "Age of Empires: Age of Kings", region: "USA", serial: "NTR-AAGE-USA", ap: false },
+        { title: "Alien Infestation", region: "USA", serial: "BKNE-USA", ap: true },
+        { title: "Animal Crossing: Wild World", region: "USA", serial: "NTR-ADME-USA", ap: false },
+        { title: "Anohana: The Flower We Saw That Day", region: "JPN", serial: "BTHJ-JPN", ap: true },
+        { title: "Anno 1701: Dawn of Discovery", region: "EUR", serial: "YAPP-EUR", ap: false },
+        { title: "Apollo Justice: Ace Attorney", region: "USA", serial: "YAPE-USA", ap: false },
+        { title: "Assassin's Creed II: Discovery", region: "USA", serial: "BACE-USA", ap: true },
+        { title: "Bakugan Battle Brawlers", region: "USA", serial: "BBQE-USA", ap: true },
+        { title: "Band Hero", region: "USA", serial: "BHXE-USA", ap: true },
+        { title: "Batman: The Brave and the Bold", region: "USA", serial: "B3XE-USA", ap: true },
+        { title: "Battle of Giants: Dragons", region: "USA", serial: "B3GE-USA", ap: true },
+        { title: "Bejeweled Twist", region: "USA", serial: "BJW-USA", ap: false },
+        { title: "Ben 10: Alien Force", region: "USA", serial: "B10E-USA", ap: false },
+        { title: "Bleach: The Blade of Fate", region: "USA", serial: "YBLX-USA", ap: false },
+        { title: "Bomberman", region: "USA", serial: "NTR-ABME-USA", ap: false },
+        { title: "Brain Age: Train Your Brain in Minutes a Day!", region: "USA", serial: "NTR-AUEE-USA", ap: false },
+        { title: "Call of Duty 4: Modern Warfare", region: "USA", serial: "C4WE-USA", ap: false },
+        { title: "Call of Duty: Black Ops", region: "USA", serial: "BOPE-USA", ap: true },
+        { title: "Call of Duty: Modern Warfare Mobilized", region: "USA", serial: "CMWE-USA", ap: true },
+        { title: "Castlevania: Dawn of Sorrow", region: "USA", serial: "NTR-ACVE-USA", ap: false },
+        { title: "Castlevania: Order of Ecclesia", region: "USA", serial: "YCCE-USA", ap: true },
+        { title: "Castlevania: Portrait of Ruin", region: "USA", serial: "YCPV-USA", ap: false },
+        { title: "Chrono Trigger", region: "USA", serial: "YCHE-USA", ap: false },
+        { title: "Contra 4", region: "USA", serial: "YCOE-USA", ap: false },
+        { title: "Cooking Mama", region: "USA", serial: "NTR-ACME-USA", ap: false },
+        { title: "Custom Robo Arena", region: "USA", serial: "YCRE-USA", ap: false },
+        { title: "Dementium: The Ward", region: "USA", serial: "YDME-USA", ap: false },
+        { title: "Dementium II", region: "USA", serial: "BD2E-USA", ap: true },
+        { title: "Digimon World Championship", region: "USA", serial: "BDXE-USA", ap: false },
+        { title: "Diddy Kong Racing DS", region: "USA", serial: "YDKE-USA", ap: false },
+        { title: "Disgaea DS", region: "USA", serial: "YDIS-USA", ap: false },
+        { title: "Dragon Ball Z: Attack of the Saiyans", region: "USA", serial: "BDBE-USA", ap: true },
+        { title: "Dragon Quest IV: Chapters of the Chosen", region: "USA", serial: "YI4E-USA", ap: true },
+        { title: "Dragon Quest V: Hand of the Heavenly Bride", region: "USA", serial: "YI5E-USA", ap: true },
+        { title: "Dragon Quest VI: Realms of Revelation", region: "USA", serial: "DQ6E-USA", ap: true },
+        { title: "Dragon Quest IX: Sentinels of the Starry Skies", region: "USA", serial: "YQUE-USA", ap: true },
+        { title: "Elite Beat Agents", region: "USA", serial: "AEAE-USA", ap: false },
+        { title: "Epic Mickey: Power of Illusion", region: "USA", serial: "EMXE-USA", ap: true },
+        { title: "Etrian Odyssey", region: "USA", serial: "YETE-USA", ap: false },
+        { title: "Etrian Odyssey III: The Drowned City", region: "USA", serial: "BE3E-USA", ap: true },
+        { title: "Final Fantasy III", region: "USA", serial: "YFFE-USA", ap: false },
+        { title: "Final Fantasy IV", region: "USA", serial: "YF4E-USA", ap: false },
+        { title: "Final Fantasy Crystal Chronicles: Echoes of Time", region: "USA", serial: "YFCE-USA", ap: true },
+        { title: "Final Fantasy Tactics A2: Grimoire of the Rift", region: "USA", serial: "YF2E-USA", ap: false },
+        { title: "Fire Emblem: Shadow Dragon", region: "USA", serial: "YFDE-USA", ap: true },
+        { title: "Game & Watch Collection", region: "USA", serial: "ZGWV-USA", ap: false },
+        { title: "Ghost Trick: Phantom Detective", region: "USA", serial: "BGTE-USA", ap: true },
+        { title: "Golden Sun: Dark Dawn", region: "USA", serial: "BGSE-USA", ap: true },
+        { title: "Grand Theft Auto: Chinatown Wars", region: "USA", serial: "YGTE-USA", ap: false },
+        { title: "Guilty Gear Dust Strikers", region: "USA", serial: "YGGE-USA", ap: false },
+        { title: "Guitar Hero: On Tour", region: "USA", serial: "YGHE-USA", ap: false },
+        { title: "Hakuoki: Demon of the Fleeting Blossom", region: "USA", serial: "BHAE-USA", ap: true },
+        { title: "Hannah Montana: The Movie", region: "USA", serial: "BHME-USA", ap: false },
+        { title: "Harry Potter and the Deathly Hallows: Part 1", region: "USA", serial: "BH7E-USA", ap: true },
+        { title: "Harvest Moon DS", region: "USA", serial: "NVHE-USA", ap: false },
+        { title: "Harvest Moon: Island of Happiness", region: "USA", serial: "YHIE-USA", ap: false },
+        { title: "Hotel Dusk: Room 215", region: "USA", serial: "YHUE-USA", ap: false },
+        { title: "Ice Age: Dawn of the Dinosaurs", region: "USA", serial: "BI4E-USA", ap: true },
+        { title: "Inazuma Eleven", region: "EUR", serial: "BIEP-EUR", ap: true },
+        { title: "Infinite Space", region: "USA", serial: "BINE-USA", ap: true },
+        { title: "Kingdom Hearts 358/2 Days", region: "USA", serial: "Y38E-USA", ap: true },
+        { title: "Kingdom Hearts Re:coded", region: "USA", serial: "BKCE-USA", ap: true },
+        { title: "Kirby Mass Attack", region: "USA", serial: "BKSE-USA", ap: true },
+        { title: "Kirby Super Star Ultra", region: "USA", serial: "YKSE-USA", ap: false },
+        { title: "Klonoa: Door to Phantomile (DS)", region: "USA", serial: "BKNE-USA", ap: false },
+        { title: "Last Window: The Secret of Cape West", region: "EUR", serial: "BLWP-EUR", ap: true },
+        { title: "LEGO Batman: The Videogame", region: "USA", serial: "BLBE-USA", ap: false },
+        { title: "LEGO Harry Potter: Years 1-4", region: "USA", serial: "BLHP-USA", ap: true },
+        { title: "LEGO Star Wars: The Complete Saga", region: "USA", serial: "YLSE-USA", ap: false },
+        { title: "Little Red Riding Hood's Zombie BBQ", region: "USA", serial: "YLQE-USA", ap: false },
+        { title: "Lost in Blue", region: "USA", serial: "NTR-YLBE-USA", ap: false },
+        { title: "Luminous Arc", region: "USA", serial: "YLUE-USA", ap: false },
+        { title: "Magical Starsign", region: "USA", serial: "YMSE-USA", ap: false },
+        { title: "Mario & Luigi: Bowser's Inside Story", region: "USA", serial: "CBOE-USA", ap: true },
+        { title: "Mario & Luigi: Partners in Time", region: "USA", serial: "NTR-A2QE-USA", ap: false },
+        { title: "Mario & Sonic at the Olympic Winter Games", region: "USA", serial: "BMSE-USA", ap: true },
+        { title: "Mario Kart DS", region: "World", serial: "NTR-AMCE-USA", ap: false },
+        { title: "Mario Party DS", region: "USA", serial: "YMDE-USA", ap: false },
+        { title: "Mario vs. Donkey Kong: Mini-Land Mayhem!", region: "USA", serial: "BMDE-USA", ap: true },
+        { title: "Mega Man Zero Collection", region: "USA", serial: "BZCE-USA", ap: true },
+        { title: "Metal Slug 7", region: "USA", serial: "YMSI-USA", ap: false },
+        { title: "Metroid Prime Hunters", region: "USA", serial: "NTR-AMNE-USA", ap: false },
+        { title: "Monster Rancher DS", region: "USA", serial: "BMRE-USA", ap: true },
+        { title: "Nano Stray 2", region: "USA", serial: "BN2E-USA", ap: false },
+        { title: "Naruto: Ninja Council 3", region: "USA", serial: "YNCE-USA", ap: false },
+        { title: "New Super Mario Bros.", region: "USA", serial: "NTR-A2EE-USA", ap: false },
+        { title: "Ninjatown", region: "USA", serial: "YNTE-USA", ap: false },
+        { title: "Okamiden", region: "USA", serial: "BOKE-USA", ap: true },
+        { title: "Orcs & Elves", region: "USA", serial: "YOEE-USA", ap: false },
+        { title: "Overlord: Minions", region: "USA", serial: "BOVE-USA", ap: true },
+        { title: "Pac-Pix", region: "USA", serial: "NTR-APPW-USA", ap: false },
+        { title: "Peggle: Dual Shot", region: "USA", serial: "BPGE-USA", ap: false },
+        { title: "Phantasy Star Zero", region: "USA", serial: "BPSE-USA", ap: true },
+        { title: "Phoenix Wright: Ace Attorney", region: "USA", serial: "NTR-AVAE-USA", ap: false },
+        { title: "Picross 3D", region: "USA", serial: "BP3E-USA", ap: true },
+        { title: "Plants vs. Zombies", region: "USA", serial: "BPVE-USA", ap: true },
+        { title: "Pokémon Black Version", region: "USA", serial: "IRBO-USA", ap: true },
+        { title: "Pokémon White Version", region: "USA", serial: "IRWO-USA", ap: true },
+        { title: "Pokémon Diamond Version", region: "USA", serial: "ADAW-USA", ap: false },
+        { title: "Pokémon Pearl Version", region: "USA", serial: "APAE-USA", ap: false },
+        { title: "Pokémon Platinum Version", region: "USA", serial: "NTR-CPUE-USA", ap: true },
+        { title: "Pokémon HeartGold Version", region: "USA", serial: "IPKE-USA", ap: true },
+        { title: "Pokémon SoulSilver Version", region: "USA", serial: "IPGE-USA", ap: true },
+        { title: "Pokémon Mystery Dungeon: Explorers of Sky", region: "USA", serial: "C1QE-USA", ap: true },
+        { title: "Pokémon Ranger: Guardian Signs", region: "USA", serial: "BRSE-USA", ap: true },
+        { title: "Professor Layton and the Curious Village", region: "USA", serial: "YLUE-USA", ap: false },
+        { title: "Professor Layton and the Diabolical Box", region: "USA", serial: "YPLE-USA", ap: true },
+        { title: "Professor Layton and the Last Specter", region: "USA", serial: "BPOW-USA", ap: true },
+        { title: "Quantum of Solace: 007", region: "USA", serial: "BQOE-USA", ap: true },
+        { title: "Ragnarok DS", region: "USA", serial: "BRQE-USA", ap: true },
+        { title: "Rayman Raving Rabbids 2", region: "USA", serial: "BR2E-USA", ap: true },
+        { title: "Resident Evil: Deadly Silence", region: "USA", serial: "NTR-AREW-USA", ap: false },
+        { title: "Retro Game Challenge", region: "USA", serial: "YRGE-USA", ap: false },
+        { title: "Rhythm Heaven", region: "USA", serial: "YV2E-USA", ap: true },
+        { title: "Rock Band 3", region: "USA", serial: "BR3E-USA", ap: true },
+        { title: "Rune Factory 3: A Fantasy Harvest Moon", region: "USA", serial: "BR3E-USA", ap: true },
+        { title: "Sands of Destruction", region: "USA", serial: "BSDE-USA", ap: true },
+        { title: "Scribblenauts", region: "USA", serial: "BSCE-USA", ap: true },
+        { title: "Shin Megami Tensei: Devil Survivor", region: "USA", serial: "BDSV-USA", ap: true },
+        { title: "Shin Megami Tensei: Strange Journey", region: "USA", serial: "BSJE-USA", ap: true },
+        { title: "Sonic & SEGA All-Stars Racing", region: "USA", serial: "BSSE-USA", ap: true },
+        { title: "Sonic Chronicles: The Dark Brotherhood", region: "USA", serial: "YSCE-USA", ap: false },
+        { title: "Sonic Colors", region: "USA", serial: "BSNE-USA", ap: true },
+        { title: "Sonic Rush", region: "USA", serial: "NTR-ASSE-USA", ap: false },
+        { title: "Sonic Rush Adventure", region: "USA", serial: "YSQE-USA", ap: false },
+        { title: "Space Invaders Extreme", region: "USA", serial: "YSIE-USA", ap: false },
+        { title: "Spider-Man: Edge of Time", region: "USA", serial: "BSME-USA", ap: true },
+        { title: "Star Fox Command", region: "USA", serial: "YSOE-USA", ap: false },
+        { title: "Star Wars: The Force Unleashed", region: "USA", serial: "YWFE-USA", ap: true },
+        { title: "Suikoden Tierkreis", region: "USA", serial: "YSKE-USA", ap: false },
+        { title: "Super Mario 64 DS", region: "USA", serial: "NTR-AM8E-USA", ap: false },
+        { title: "Super Princess Peach", region: "USA", serial: "NTR-ADQE-USA", ap: false },
+        { title: "Super Robot Taisen OG Saga", region: "USA", serial: "BSRE-USA", ap: true },
+        { title: "Super Scribblenauts", region: "USA", serial: "B2SE-USA", ap: true },
+        { title: "Tetris DS", region: "USA", serial: "NTR-ATR-USA", ap: false },
+        { title: "The Legend of Zelda: Phantom Hourglass", region: "USA", serial: "NTR-A2DE-USA", ap: false },
+        { title: "The Legend of Zelda: Spirit Tracks", region: "USA", serial: "BKOE-USA", ap: true },
+        { title: "The Sims 2", region: "USA", serial: "NTR-AS2E-USA", ap: false },
+        { title: "The World Ends with You", region: "USA", serial: "YWSE-USA", ap: true },
+        { title: "Thor: God of Thunder", region: "USA", serial: "BTHE-USA", ap: true },
+        { title: "Tomb Raider: Underworld", region: "USA", serial: "BTUE-USA", ap: true },
+        { title: "Trace Memory", region: "USA", serial: "NTR-ATCE-USA", ap: false },
+        { title: "Transformers: Autobots", region: "USA", serial: "YTFE-USA", ap: false },
+        { title: "Trauma Center: Under the Knife", region: "USA", serial: "NTR-AYCE-USA", ap: false },
+        { title: "Ultimate Mortal Kombat", region: "USA", serial: "YUME-USA", ap: false },
+        { title: "Ultimate Spider-Man", region: "USA", serial: "NTR-AUSE-USA", ap: false },
+        { title: "Uno", region: "USA", serial: "BUNE-USA", ap: true },
+        { title: "Up", region: "USA", serial: "BUPE-USA", ap: true },
+        { title: "Valkyrie Profile: Covenant of the Plume", region: "USA", serial: "YVPE-USA", ap: false },
+        { title: "Viewtiful Joe: Double Trouble!", region: "USA", serial: "NTR-AVJE-USA", ap: false },
+        { title: "Viva Piñata: Pocket Paradise", region: "USA", serial: "BVPE-USA", ap: false },
+        { title: "WarioWare: D.I.Y.", region: "USA", serial: "BWXE-USA", ap: true },
+        { title: "WarioWare: Touched!", region: "USA", serial: "NTR-AYWE-USA", ap: false },
+        { title: "Where the Wild Things Are", region: "USA", serial: "BWWE-USA", ap: true },
+        { title: "Witch's Tale", region: "USA", serial: "BWIE-USA", ap: true },
+        { title: "X-Men Origins: Wolverine", region: "USA", serial: "BXME-USA", ap: true },
+        { title: "Yoshi's Island DS", region: "USA", serial: "NYSE-USA", ap: false },
+        { title: "Yoshi Touch & Go", region: "USA", serial: "NTR-AYGE-USA", ap: false },
+        { title: "Yu-Gi-Oh! 5D's Stardust Accelerator", region: "USA", serial: "BYDE-USA", ap: true },
+        { title: "Yu-Gi-Oh! World Championship 2011", region: "USA", serial: "BY1E-USA", ap: true },
+        { title: "Yggdra Union: We'll Never Fight Alone", region: "USA", serial: "BYGE-USA", ap: true },
+        { title: "Zero Escape: 9 Hours, 9 Persons, 9 Doors", region: "USA", serial: "B9PE-USA", ap: true },
+        { title: "Zuma's Revenge", region: "USA", serial: "BZME-USA", ap: true }
+    ];
+
+    function renderTable(data) {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = "";
+        
+        data.forEach(game => {
+            const tr = document.createElement('tr');
+            
+            let badgeClass = 'badge-usa';
+            if (game.region === 'EUR') badgeClass = 'badge-eur';
+            if (game.region === 'JPN') badgeClass = 'badge-jpn';
+            if (game.region === 'World') badgeClass = 'badge-world';
+            if (game.region === 'Emulador') badgeClass = 'badge-emu';
+
+            tr.innerHTML = `
+                <td><strong>${game.title}</strong></td>
+                <td><span class="badge ${badgeClass}">${game.region}</span></td>
+                <td><code>${game.serial}</code></td>
+                <td><span class="${game.ap ? 'ap-yes' : 'ap-no'}">${game.ap ? 'Sim (Fix/YSMenu)' : 'Não'}</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        document.getElementById('statsCount').innerText = `Exibindo ${data.length} de ${gamesData.length} itens totais (Catálogo DS + Emuladores R4)`;
+    }
+
+    function filterTable() {
+        const searchVal = document.getElementById('searchInput').value.toLowerCase();
+        const regionVal = document.getElementById('regionFilter').value;
+
+        const filtered = gamesData.filter(game => {
+            const matchesSearch = game.title.toLowerCase().includes(searchVal) || game.serial.toLowerCase().includes(searchVal);
+            const matchesRegion = regionVal === "" || game.region === regionVal;
+            return matchesSearch && matchesRegion;
+        });
+
+        renderTable(filtered);
+    }
+
+    renderTable(gamesData);
+</script>
+
+</body>
+</html>
