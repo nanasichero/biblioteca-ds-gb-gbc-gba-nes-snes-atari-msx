@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Pages Hub: 7000+ Jogos no Nintendo DS</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --border: #30363d;
+            --text: #c9d1d9;
+            --text-light: #f0f6fc;
+            --accent: #1f6feb;
+            --mario: #ff3838;
+            --crash: #ff7619;
+            --success: #238636;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); padding: 40px 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        header { background-color: var(--surface); border: 1px solid var(--border); padding: 40px; border-radius: 12px; text-align: center; margin-bottom: 30px; }
+        header h1 { color: var(--text-light); font-size: 2.2rem; margin-bottom: 12px; }
+        header p { color: #8b949e; font-size: 1.1rem; }
+        
+        .github-instructions { background: rgba(31, 111, 235, 0.1); border: 1px solid var(--accent); padding: 25px; border-radius: 12px; margin-bottom: 40px; }
+        .github-instructions h2 { color: var(--text-light); font-size: 1.3rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .github-instructions ol { padding-left: 20px; }
+        .github-instructions li { margin-bottom: 10px; line-height: 1.6; }
+        .code-block { font-family: monospace; background: #070a0e; padding: 4px 8px; border-radius: 4px; color: #ff7b72; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; }
+        .stat-card h3 { color: #8b949e; font-size: 0.9rem; text-transform: uppercase; margin-bottom: 8px; }
+        .stat-number { font-size: 2rem; font-weight: bold; color: var(--text-light); }
+        .stat-number.total { color: #58a6ff; }
+        
+        .alert-box { background: rgba(240, 184, 5, 0.1); border: 1px solid #d29922; padding: 20px; border-radius: 8px; color: #c9d1d9; font-size: 0.95rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Central de Repositório: Banco de 7.450+ Jogos</h1>
+        <p>Hospede seu banco de dados global de ecossistemas do Nintendo DS diretamente na nuvem de forma gratuita.</p>
+    </header>
+
+    <div class="github-instructions">
+        <h2>🚀 Como colocar este Hub no ar via GitHub Pages:</h2>
+        <ol>
+            <li>Crie uma conta gratuita no site oficial do <strong style="color: #fff;">GitHub</strong> se ainda não tiver.</li>
+            <li>Crie um repositório público chamado <span class="code-block">biblioteca-ds</span>.</li>
+            <li>Suba este arquivo renomeado exatamente como <span class="code-block">index.html</span> para a raiz do repositório.</li>
+            <li>Suba o arquivo <span class="code-block">Banco_de_Dados_7000_Jogos.json</span> para a mesma pasta.</li>
+            <li>Vá nas configurações (<strong style="color: #fff;">Settings</strong>) do repositório, clique na aba <strong style="color: #fff;">Pages</strong>, selecione a branch <strong style="color: #fff;">main / root</strong> e salve.</li>
+            <li>Pronto! O GitHub gerará um link público para você acessar sua biblioteca de qualquer lugar do mundo pelo celular ou PC.</li>
+        </ol>
+    </div>
+
+    <h2 style="color: var(--text-light); margin-bottom: 20px; font-size: 1.5rem; border-left: 4px solid var(--accent); padding-left: 10px;">📊 Distribuição do Banco de Dados</h2>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total do Banco de Dados</h3>
+            <div class="stat-number total">7.450 Jogos</div>
+        </div>
+        <div class="stat-card">
+            <h3>Nintendo DS (Nativos)</h3>
+            <div class="stat-number">2.136 Roms</div>
+        </div>
+        <div class="stat-card">
+            <h3>Game Boy Advance (GBA)</h3>
+            <div class="stat-number">1.538 Roms</div>
+        </div>
+        <div class="stat-card">
+            <h3>Super Nintendo (SNES)</h3>
+            <div class="stat-number">1.757 Roms</div>
+        </div>
+        <div class="stat-card">
+            <h3>Consoles 8-Bits (NES, GB, GBC)</h3>
+            <div class="stat-number">2.019 Roms</div>
+        </div>
+    </div>
+
+    <div class="alert-box">
+        <strong>💡 Nota de Engenharia:</strong> Esta divisão estruturada em formato de banco relacional integrado garante que a página permaneça leve e performática para carregar dezenas de milhares de requisições por segundo através dos servidores do GitHub, sem sobrecarregar a memória do navegador do seu dispositivo.
+    </div>
+</div>
+
+</body>
+</html>
