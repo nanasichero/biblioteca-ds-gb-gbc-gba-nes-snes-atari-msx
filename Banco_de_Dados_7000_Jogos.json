@@ -1,0 +1,45 @@
+{
+    "estatisticas": {
+        "total_jogos": 7450,
+        "nintendo_ds": 2136,
+        "game_boy_advance": 1538,
+        "super_nintendo": 1757,
+        "nintendo_nes": 716,
+        "game_boy_color": 915,
+        "game_boy_classic": 712,
+        "crash_bandicoot_exclusivos": 8,
+        "super_mario_exclusivos": 32
+    },
+    "plataformas": {
+        "Nintendo DS": {
+            "compatibilidade": "Nativo (100% Perfeito)",
+            "emulador": "Kernel R4",
+            "total": 2136
+        },
+        "Game Boy Advance": {
+            "compatibilidade": "Nativo / Hypervisor",
+            "emulador": "GBARunner2",
+            "total": 1538
+        },
+        "Super Nintendo (SNES)": {
+            "compatibilidade": "Emulação Média/Regular",
+            "emulador": "SNEmulDS",
+            "total": 1757
+        },
+        "Nintendo Entertainment System (NES)": {
+            "compatibilidade": "Emulação Perfeita",
+            "emulador": "NesDS",
+            "total": 716
+        },
+        "Game Boy Color": {
+            "compatibilidade": "Emulação Perfeita",
+            "emulador": "GameYob",
+            "total": 915
+        },
+        "Game Boy Classic": {
+            "compatibilidade": "Emulação Perfeita",
+            "emulador": "GameYob",
+            "total": 712
+        }
+    }
+}
